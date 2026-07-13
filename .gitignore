@@ -1,0 +1,10 @@
+# Binaries & build output
+*.exe
+*.out
+/dist/
+
+# Test artifacts
+*.test
+coverage.out
+
+.DS_Store
