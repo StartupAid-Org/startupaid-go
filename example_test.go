@@ -34,6 +34,26 @@ func ExampleClient_SendEmail() {
 	fmt.Println("sent:", msg.ID)
 }
 
+func ExampleClient_SendOTP() {
+	client := startupaid.New("sk_your_key")
+	ctx := context.Background()
+
+	ch, err := client.SendOTP(ctx, startupaid.SendOTPRequest{
+		To:      "+2348012345678",
+		AppName: "Acme",
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("sent:", ch.ID)
+
+	ok, err := client.VerifyOTP(ctx, "+2348012345678", "123456")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("verified:", ok)
+}
+
 func ExampleClient_SchedulePost() {
 	client := startupaid.New("sk_your_key")
 	ctx := context.Background()

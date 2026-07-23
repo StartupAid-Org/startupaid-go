@@ -52,3 +52,13 @@ func (c *Client) Currencies(ctx context.Context) (map[string]any, error) {
 	}
 	return out, nil
 }
+
+// CurrencyStatus reports rate freshness (when rates were last refreshed and from
+// which upstream). Returned as a decoded map to stay flexible.
+func (c *Client) CurrencyStatus(ctx context.Context) (map[string]any, error) {
+	var out map[string]any
+	if err := c.do(ctx, http.MethodGet, "/v1/currency/status", nil, nil, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}

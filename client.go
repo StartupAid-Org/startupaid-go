@@ -1,4 +1,4 @@
-// Package startupaid is the official Go client for the startupAid API — send
+// Package startupaid is the official Go client for the startupaid API — send
 // transactional email, send push, schedule social posts, and convert currency,
 // all with your account API key.
 //
@@ -21,7 +21,7 @@ import (
 // DefaultBaseURL is the production API endpoint.
 const DefaultBaseURL = "https://api.startupaid.org"
 
-// Client is a startupAid API client. Create one with New.
+// Client is a startupaid API client. Create one with New.
 type Client struct {
 	apiKey  string
 	baseURL string

@@ -1,8 +1,8 @@
 # startupaid-go
 
-The official Go client for the [startupAid](https://startupaid.org) API — send
-transactional email, send push, schedule social posts, and convert currency, all
-with your account API key.
+The official Go client for the [startupaid](https://startupaid.org) API — send
+transactional email, send push, verify phone numbers with WhatsApp OTP, schedule
+social posts, and convert currency, all with your account API key.
 
 ## Install
 
@@ -39,7 +39,7 @@ func main() {
 }
 ```
 
-Create an API key in your startupAid dashboard → **API Keys**.
+Create an API key in your startupaid dashboard → **API Keys**.
 
 ## Usage
 
@@ -67,11 +67,33 @@ list, err := client.Currencies(ctx)
 ### Push
 
 ```go
-_, err := client.SendPush(ctx, "app_id", startupaid.SendPushRequest{
+// Register a device token (call again to refresh it).
+device, err := client.RegisterDevice(ctx, "app_id", startupaid.RegisterDeviceRequest{
+	Token:    "fcm_or_web_push_token",
+	Platform: "android", // web | ios | android
+	UserRef:  "u_123",
+})
+
+_, err = client.SendPush(ctx, "app_id", startupaid.SendPushRequest{
 	Target: startupaid.PushTarget{UserRef: "u_123"},
 	Title:  "Your order shipped",
 	Body:   "Track it in the app.",
 })
+
+summary, err := client.GetPushMessage(ctx, "app_id", "message_id")
+```
+
+### OTP (WhatsApp)
+
+```go
+// Send a code — we generate, deliver, and track it.
+ch, err := client.SendOTP(ctx, startupaid.SendOTPRequest{
+	To:      "+2348012345678",
+	AppName: "Acme",
+})
+
+// Later, check the code the user entered.
+ok, err := client.VerifyOTP(ctx, "+2348012345678", "123456")
 ```
 
 ### Social
@@ -119,7 +141,7 @@ if errors.As(err, &apiErr) {
 ```
 
 Each method requires your account to be subscribed to the matching product
-(email, currency, push, social); otherwise the API returns an upgrade prompt.
+(email, currency, push, otp, social); otherwise the API returns an upgrade prompt.
 
 ## License
 
